@@ -70,34 +70,24 @@ on a real provider or a real Supabase project.
 
 ## How it works
 
+```mermaid
+flowchart TD
+    A[Upload image or video] --> B{Video?}
+    B -->|yes| C[Extract frames]
+    C --> D[Drop blurry / dark / duplicate frames]
+    D --> E[Vision model]
+    B -->|no| E
+    E --> F[Raw model output - untrusted]
+    F --> G[Validation - discard or downgrade bad data]
+    G --> H[SKU matching against the product catalog]
+    H --> I[Confidence scoring per field]
+    I --> J[Structured audit saved to Postgres]
+    J --> K[Human confirms / corrects / rejects anything low-confidence]
 ```
-Upload (image or video)
-      |
-      v
-Video?  -> extract frames -> drop the blurry/dark/duplicate ones
-      |
-      v
-Vision model looks at the remaining frame(s)
-      |
-      v
-Raw model output (untrusted - could be wrong, incomplete, malformed)
-      |
-      v
-Validation  (bad data gets discarded or downgraded, never trusted blindly)
-      |
-      v
-SKU matching against the product catalog
-      |
-      v
-Confidence scoring (per field, factoring in the catalog match and
-                     whether multiple frames agree)
-      |
-      v
-Structured audit saved to Postgres
-      |
-      v
-A human can confirm / correct / reject anything low-confidence
-```
+
+Raw model output is never trusted blindly - it could be wrong, incomplete,
+or malformed. Confidence scoring factors in the catalog match and whether
+multiple frames agree with each other.
 
 Every extracted value looks the same, whether it's a brand, a price, or a
 promo:
