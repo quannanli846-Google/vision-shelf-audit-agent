@@ -1,0 +1,21 @@
+# Python
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.pytest_cache/
+backend/*.egg-info/
+backend/sample_data/uploads/
+
+# Env files (never commit secrets)
+.env
+backend/.env
+frontend/.env
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.oxlintrc.json.bak
+
+# Editors / OS
+.DS_Store
+*.pyc
